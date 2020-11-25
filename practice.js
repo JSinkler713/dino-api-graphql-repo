@@ -11,26 +11,23 @@ const makeUser = async () => {
 
 
 const UserDino = async (userId, dinoId)=> {
+  try{
   const FoundUser = await db.user.findByPk( userId )
-  const FoundDino = await db.dinosaurs.findByPk(dinoId)
-  console.log(FoundUser)
-  console.log('***********************')
-  console.log(FoundDino)
-  console.log('***********************')
-  await FoundUser.addDinosaurs(FoundDino);
-
+  await FoundUser.addDinosaurs(dinoId);
+  const updatedUser = await db.user.findOne({where: { id:  userId }, include: [db.dinosaurs]})
+  return updatedUser
+  } catch (err) {
+    console.log('error', err)
+    return err
+  }
 }
 
-//UserDino(1, 3)
+UserDino(2, 3)
 
 const FindUserWith = async(userId)=> {
   const FoundUser = await db.user.findOne({where: { id: userId }, include: [db.dinosaurs]})
-  console.log('***********************')
-  console.log(FoundUser)
-  console.log('***********************')
   console.log(FoundUser.dinosaurs)
-
 }
 
-FindUserWith(1)
+//FindUserWith(2)
 
