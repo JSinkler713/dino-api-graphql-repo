@@ -2,21 +2,21 @@
   "development": {
     "username": "j",
     "password": null,
-    "database": "dinosaurs",
+    "database": "dino",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "j",
     "password": null,
-    "database": "dinosaurs",
+    "database": "dino",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "j",
     "password": null,
-    "database": "dinosaurs",
+    "database": "dino",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
