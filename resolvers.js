@@ -3,23 +3,19 @@ const resolvers = {
   Query: {
     async allDinos(_,__,context) {
       const allDinos =  await context.dinosaurs.findAll()
-      console.log(allDinos)
       return allDinos
     },
     async aDino(_,{input},context) {
-      console.log(input)
+      //input {"id": "someId"}
       const dino = await context.dinosaurs.findOne({
         where: input
       })
-      console.log(dino)
       return dino
     },
     async aUser(_,{input},context) {
-      console.log(input)
       const user = await context.user.findOne({
         where: input
       })
-      console.log(user)
       return user
     }
   },
@@ -30,26 +26,28 @@ const resolvers = {
      const createdDino = await context.dinosaurs.create({ name, type })
       return createdDino
     },
-    async makeUser(_, {input: {name, dinos}}, context) {
-     const createdUser = await context.users.create({ name, type })
+    async makeUser(_, {input: {name}}, context) {
+     const createdUser = await context.user.create({ name })
       return createdUser
-    }
+    },
+    async makeAssociation(parent, {input: {userId, dinoId}}, context) {
+      const foundUser = await context.user.findByPk( userId )
+      await foundUser.addDinosaurs(dinoId)
+      const updatedUser = await context.user.findOne({ where: {id:userId}, include: ['dinosaurs']})
+      return updatedUser
+    },
   },
+  //match any fields on a type that are not scalars to tell it how to resolve
   User: {
+    //dinos is type [Dinosaur] on users, so we tell it how to resolve
+    //we make use of the parent for the specific user the dinos field
+    //will be on
     dinos: async(parent, {input}, context)=> {
-      console.log(parent.id)
+      //the parent is a USER, so we have access to it's fields, like parent.id
       const foundUser = await context.user.findOne({where: { id: parent.id }, include: [context.dinosaurs]})
-      console.log('***********************')
-      console.log('***********************')
       return foundUser.dinosaurs
     }
   }
-  
-  //any type that has a relationsihp to another
-  //settings has a user
-      //given settings return a user with the given settings
-      //if we had a real db here we would do that
-      //instead just return what it's expecting, a user
 }
 module.exports = resolvers
 

@@ -1,6 +1,7 @@
 const gql = require('graphql-tag')
 
 const typeDefs = gql`
+  # types
   type Dinosaur {
     id: ID!
     name: String!
@@ -11,18 +12,24 @@ const typeDefs = gql`
   type User {
     id:ID!
     name:String
+    # will resolve this field, non-scalar
     dinos: [Dinosaur]
   }
+
+  # Inputs
   input UserId {
     id: ID
   }
-
   input UserInput {
     name: String
   }
   input DinoInput {
     name: String!
     type: String!
+  }
+  input UserDinoInput {
+    userId:ID
+    dinoId:ID
   }
 
   # Query type
@@ -32,11 +39,11 @@ const typeDefs = gql`
     aUser(input:UserId): User
   }
 
-
   # Mutation type
   type Mutation {
     makeDino(input:DinoInput): Dinosaur!
     makeUser(input:UserInput): User!
+    makeAssociation(input:UserDinoInput): User!
   }
 `
 module.exports = typeDefs
