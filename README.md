@@ -9,3 +9,17 @@ This is a site that set up a basic graphql api, for a react app to consume.
 
 ## Tech
  This uses express and apollo server. The backend is written with sequelize ORM with postgres.
+
+ Use queries and mutations to play around
+ *Sample Query*
+
+ ```js
+ query GetDinos {
+  allDinos {
+    name
+    type
+    createdAt
+    id
+  }
+}
+```
